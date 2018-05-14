@@ -1,5 +1,4 @@
-.idea
-/
+.idea/
 *.log
 src/main/resources/keystore.p12
 target/
