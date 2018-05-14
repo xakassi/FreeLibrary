@@ -1,0 +1,7 @@
+.idea
+/
+*.log
+src/main/resources/keystore.p12
+target/
+*.iml
+TestOutputFile.txt

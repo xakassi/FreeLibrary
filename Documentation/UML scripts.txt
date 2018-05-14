@@ -1,0 +1,137 @@
+http://plantuml.com/sequence-diagram
+
+-----------Registration--------------
+@startuml
+participant Controller
+
+Controller-> View: User full name, login, password request
+activate Controller
+activate View
+
+View --> Controller: User info
+deactivate View
+
+Controller -> UserService: register(user)
+activate UserService
+UserService --> Controller: << true / false >>
+deactivate UserService
+
+Controller-> View: result
+deactivate Controller
+deactivate View
+@enduml
+
+
+------------Authentication--------------------
+@startuml
+participant Controller
+
+Controller-> View: User login & password request
+activate Controller
+activate View
+
+View --> Controller: User login & password
+deactivate View
+
+Controller -> AuthService: authenticate(login, password)
+activate AuthService
+AuthService --> Controller: << true / false >>
+deactivate AuthService
+
+Controller-> View: result
+deactivate Controller
+deactivate View
+@enduml
+
+
+
+------------------SearchBooks--------------------
+@startuml
+participant Controller
+
+Controller-> View: bookSearchRequest [Book name, author, genre & category]
+activate Controller
+activate View
+
+View --> Controller: bookSearchRequest 
+deactivate View
+
+Controller -> SearchService: searchBooks(bookSearchRequest)
+activate SearchService
+SearchService -> SearchService : parse BookSearchRequest\n and prepare SQL-query\n and its parameters for DB
+SearchService -> DBService: searchBooksByRequest(prepareSQLQuery, parameters)
+activate DBService
+DBService --> SearchService: booksList
+deactivate DBService 
+SearchService --> Controller: booksList
+deactivate SearchService
+
+Controller-> View: resultBooksList
+deactivate Controller
+deactivate View
+@enduml
+
+
+
+------------------Download book----------------------
+@startuml
+participant Controller
+
+Controller-> View: book id for downloading request
+activate Controller
+activate View
+
+View --> Controller: book id
+deactivate View
+
+Controller -> BookService: getBookByID(id)
+activate BookService
+BookService --> Controller: book
+deactivate BookService
+
+
+Controller -> LibrarySettings: get books common folder path
+activate LibrarySettings
+LibrarySettings --> Controller: books folder path
+deactivate LibrarySettings
+
+Controller-> View: response.outputStream.write(new File(books folder path + book name))
+deactivate Controller
+deactivate View
+@enduml
+
+
+
+---------------Upload-----------------------
+@startuml
+participant Controller
+
+Controller-> View: file for uploading request
+activate Controller
+activate View
+
+View --> Controller: MultipartFile file
+deactivate View
+
+Controller -> Controller: is file size and extension ok?
+activate Controller
+
+Controller -> LibrarySettings: get unchecked books common folder path
+activate LibrarySettings
+LibrarySettings --> Controller: unchecked books folder path
+deactivate LibrarySettings
+
+Controller -> Controller: outputStream.write(new File(unchecked books folder path + file name))
+
+Controller -> Controller: is file content valid?
+activate Controller
+Controller -> BookService: add new book for admin checking and processing
+activate BookService
+BookService --> Controller: ok
+deactivate BookService
+deactivate Controller
+
+deactivate Controller
+Controller-> View: result
+deactivate Controller
+@enduml
