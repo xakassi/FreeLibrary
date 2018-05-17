@@ -1,5 +1,7 @@
 package library.model;
 
+/*@Entity
+@Table(name = "book")*/
 public class Book {
     private int id;
     private String name;

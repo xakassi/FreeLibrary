@@ -1,0 +1,73 @@
+# ===============================
+# DATABASE POSTGESQL
+# ===============================
+
+spring:
+    datasource:
+        driverClassName: org.postgresql.Driver
+        url: jdbc:postgresql://localhost:5432/FreeLibraryDB
+        username: postgres
+        password: 123
+---
+
+# ===============================
+# JPA / HIBERNATE
+# ===============================
+
+spring:
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                dialect : org.hibernate.dialect.PostgreSQL82Dialect
+                current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+
+                # Fix Postgres JPA Error:
+                # Method org.postgresql.jdbc.PgConnection.createClob() is not yet implemented.
+
+                temp:
+                  use_jdbc_metadata_defaults: false
+
+
+---
+
+# ===============================
+# HTTPS
+# ===============================
+
+server:
+    port: 8443
+    ssl.key-store: classpath:keystore.p12
+    ssl.key-store-password: 123456
+    ssl.keyStoreType: PKCS12
+    ssl.keyAlias: tomcat
+---
+
+# ===============================
+# JSP
+# ===============================
+
+spring:
+    mvc:
+        view:
+            prefix: /WEB-INF/jsp/
+            suffix: .jsp
+---
+
+# ===============================
+# Books
+# ===============================
+
+spring:
+    servlet:
+        multipart:
+            max-file-size: -1
+            max-request-size: -1
+---
+
+library:
+    books:
+        booksPath: C:/Users/Taisia/Documents/Books for Free Library/Books/
+        uncheckedPath: C:/Users/Taisia/Documents/Books for Free Library/Unchecked books/

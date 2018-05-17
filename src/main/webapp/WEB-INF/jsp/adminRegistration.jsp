@@ -8,43 +8,43 @@
 </head>
 <body>
 
-    <spring:form method="post" modelAttribute="newUser" action="/check-admin-login">
+<spring:form method="post" modelAttribute="newUser" action="/check-admin-login">
 
-        <h2> Registration </h2>
-        <table>
-            <tr>
-                <td> First name: </td>
-                 <td> <spring:input path="firstName"/> </td>
-            </tr>
-            <tr>
-                <td> Surname: </td>
-                <td> <spring:input path="lastName"/> </td>
-            </tr>
-            <tr>
-                <td> Login: </td>
-                <td> <spring:input path="login"/> </td>
-            </tr>
-            <tr>
-                <td> Password: </td>
-                <td> <spring:password path="passwordHash"/> </td>
-            </tr>
-            <tr>
-                <td> Confirm password: </td>
-                <td> <input type="password" id="password" name="password" /> </td>
-            </tr>
-            <tr>
-                <td> <spring:button>Register</spring:button> </td>
-            </tr>
-        </table>
-    </spring:form>
+    <h2> Registration </h2>
+    <table>
+        <tr>
+            <td> First name:</td>
+            <td><spring:input path="firstName"/></td>
+        </tr>
+        <tr>
+            <td> Surname:</td>
+            <td><spring:input path="lastName"/></td>
+        </tr>
+        <tr>
+            <td> Login:</td>
+            <td><spring:input path="login"/></td>
+        </tr>
+        <tr>
+            <td> Password:</td>
+            <td><spring:password path="passwordHash"/></td>
+        </tr>
+        <tr>
+            <td> Confirm password:</td>
+            <td><input type="password" id="password" name="password"/></td>
+        </tr>
+        <tr>
+            <td><spring:button>Register</spring:button></td>
+        </tr>
+    </table>
+</spring:form>
 
-    <c:if test="${success == 'no'}">
-        <span style="color: red; "><c:out value = "${message}"/></span>
-    </c:if>
-    <c:if test="${success == 'yes'}">
-        <span style="color: green; "><c:out value = "${message}"/></span> <br>
-        <a href="/main"> Continue </a>
-    </c:if>
+<c:if test="${success == 'no'}">
+    <span style="color: red; "><c:out value="${message}"/></span>
+</c:if>
+<c:if test="${success == 'yes'}">
+    <span style="color: green; "><c:out value="${message}"/></span> <br>
+    <a href="/main"> Continue </a>
+</c:if>
 
 </body>
 </html>
