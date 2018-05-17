@@ -1,15 +1,17 @@
-package library.services;
+package library.services.JDBCImpl;
 
 import library.model.Book;
 import library.model.BookSearchRequest;
+import library.services.interfaces.DBService;
+import library.services.interfaces.SearchService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SQLSearchImpl implements SearchService {
+public class JDBCSQLSearchImpl implements SearchService {
     private DBService dbService;
 
-    public SQLSearchImpl(DBService dbService) {
+    public JDBCSQLSearchImpl(DBService dbService) {
         this.dbService = dbService;
     }
 

@@ -1,7 +1,9 @@
-package library.services;
+package library.services.JDBCImpl;
 
 import library.config.LibrarySettings;
 import library.model.*;
+import library.services.interfaces.BookService;
+import library.services.interfaces.DBService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +11,7 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.util.*;
 
-public class BookServiceImpl implements BookService {
+public class JDBCBookServiceImpl implements BookService {
     private List<Genre> genres;
     private List<Category> categories;
     private Set<UncheckedBook> uncheckedBookSet;
@@ -17,9 +19,9 @@ public class BookServiceImpl implements BookService {
     private DBService dbService;
     private LibrarySettings librarySettings;
 
-    private static final Logger LOG = LoggerFactory.getLogger(BookServiceImpl.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(JDBCBookServiceImpl.class.getName());
 
-    public BookServiceImpl(DBService dbService, LibrarySettings librarySettings) {
+    public JDBCBookServiceImpl(DBService dbService, LibrarySettings librarySettings) {
         this.dbService = dbService;
         this.librarySettings = librarySettings;
     }

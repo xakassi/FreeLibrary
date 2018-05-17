@@ -1,6 +1,6 @@
 package library.controller;
 
-import library.services.NotificationService;
+import library.services.interfaces.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.bind.annotation.ControllerAdvice;

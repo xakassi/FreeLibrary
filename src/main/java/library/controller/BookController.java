@@ -2,10 +2,10 @@ package library.controller;
 
 import library.config.LibrarySettings;
 import library.model.*;
-import library.services.BookService;
-import library.services.NotificationService;
-import library.services.SearchService;
-import library.services.UserService;
+import library.services.interfaces.BookService;
+import library.services.interfaces.NotificationService;
+import library.services.interfaces.SearchService;
+import library.services.interfaces.UserService;
 import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,9 @@
 package library.services;
 
 import library.model.*;
+import library.services.JDBCImpl.JDBCInMemorySearchService;
+import library.services.interfaces.BookService;
+import library.services.interfaces.SearchService;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.After;
@@ -52,7 +55,7 @@ public class SearchServiceTest {
             }
         });
 
-        searchService = new InMemorySearchService(bookService);
+        searchService = new JDBCInMemorySearchService(bookService);
     }
 
     @Before

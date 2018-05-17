@@ -1,4 +1,4 @@
-package library.services;
+package library.services.interfaces;
 
 import library.model.Notification;
 

@@ -1,14 +1,16 @@
-package library.services;
+package library.services.JDBCImpl;
 
 import library.model.Notification;
+import library.services.interfaces.DBService;
+import library.services.interfaces.NotificationService;
 
 import java.sql.Date;
 import java.util.List;
 
-public class NotificationServiceImpl implements NotificationService {
+public class JDBCNotificationServiceImpl implements NotificationService {
     private DBService dbService;
 
-    public NotificationServiceImpl(DBService dbService) {
+    public JDBCNotificationServiceImpl(DBService dbService) {
         this.dbService = dbService;
     }
 

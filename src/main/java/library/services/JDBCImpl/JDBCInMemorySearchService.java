@@ -1,16 +1,18 @@
-package library.services;
+package library.services.JDBCImpl;
 
 import library.model.Book;
 import library.model.BookSearchRequest;
+import library.services.interfaces.BookService;
+import library.services.interfaces.SearchService;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class InMemorySearchService implements SearchService {
+public class JDBCInMemorySearchService implements SearchService {
     private BookService bookService;
 
-    public InMemorySearchService(BookService bookService) {
+    public JDBCInMemorySearchService(BookService bookService) {
         this.bookService = bookService;
     }
 

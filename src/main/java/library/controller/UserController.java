@@ -2,8 +2,8 @@ package library.controller;
 
 import library.extra.UserChecker;
 import library.model.User;
-import library.services.AuthenticationService;
-import library.services.UserService;
+import library.services.interfaces.AuthenticationService;
+import library.services.interfaces.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

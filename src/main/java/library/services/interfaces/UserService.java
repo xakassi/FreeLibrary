@@ -1,4 +1,4 @@
-package library.services;
+package library.services.interfaces;
 
 import library.model.User;
 
@@ -41,6 +41,8 @@ public interface UserService {
      */
     void delete(User u);
 
+    void deleteByLogin(String login);
+
     /**
      * Get user by his unique login {@code login}
      *
@@ -66,10 +68,10 @@ public interface UserService {
     void updateLastName(int id, String newLastName);
 
     /**
-     * Replace old password for user with login {@code userLogin} by {@code newPasswordHash}
+     * Replace old password for user with login {@code userLogin} by {@code newPassword}
      *
      * @param id              is the id of user for which should be changed password
-     * @param newPasswordHash is the new password hash
+     * @param newPassword is the new password hash
      */
-    void updatePassword(int id, String newPasswordHash);
+    void updatePassword(int id, String newPassword);
 }

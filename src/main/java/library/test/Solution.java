@@ -2,6 +2,7 @@ package library.test;
 
 import library.model.User;
 import library.repository.*;
+import library.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,8 @@ import javax.annotation.PostConstruct;
 public class Solution {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
     @Autowired
     private BookRepository bookRepository;
     @Autowired
@@ -25,12 +28,24 @@ public class Solution {
         System.out.println("--------------------------\nfindAllUsers():\n" +
                 userRepository.findAll());
         User user = new User("Hahahahahaha", "Hah", "Hahallo", "hash(123)", "user");
-        System.out.println("--------------------------\nsave(user):\n" +
-                userRepository.save(user));
+        if (!userRepository.existsByLogin(user.getLogin())) {
+            System.out.println("Создаю!!!! " + user.getLogin());
+            user = userRepository.save(user);
+            System.out.println("--------------------------\nsave(user):\n");
+
+            System.out.println("--------------------------\nfindAllUsers():\n" +
+                    userRepository.findAll());
+
+            System.out.println("--------------------------\nsave(user)  --- update I hope:\n");
+            user.setFirstName("New Hah name");
+            userRepository.save(user);
+        }
+
         System.out.println("--------------------------\nfindAllUsers():\n" +
                 userRepository.findAll());
-        System.out.println("--------------------------\ndeleteUserByLogin");
-        //userRepository.deleteUserByLogin("Hahahahahaha");
+        System.out.println("--------------------------\ndeleteUserByLogin " + user.getLogin());
+        userService.deleteByLogin(user.getLogin());
+
         System.out.println("--------------------------\nfindAllUsers():\n" +
                 userRepository.findAll());
 
