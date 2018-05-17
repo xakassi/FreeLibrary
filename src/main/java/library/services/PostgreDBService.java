@@ -166,7 +166,7 @@ public class PostgreDBService implements DBService {
     }
 
     @Override
-    public void createBook(String bookName, int authorID, String genre, String category,
+    public void createBook(String bookName, int authorID, Genre genre, Category category,
                            int popularity, String description) {
         try (Connection connection = DriverManager.getConnection(connectionSettings.getUrl(),
                 connectionSettings.getUsername(), connectionSettings.getPassword());
@@ -176,8 +176,8 @@ public class PostgreDBService implements DBService {
                              "VALUES (?, ?, ?, ?, ?, ?)")) {
             stmt.setString(1, bookName);
             stmt.setInt(2, authorID);
-            stmt.setString(3, genre);
-            stmt.setString(4, category);
+            stmt.setString(3, genre.getName());
+            stmt.setString(4, category.getName());
             stmt.setInt(5, popularity);
             stmt.setString(6, description);
             stmt.execute();
@@ -224,12 +224,12 @@ public class PostgreDBService implements DBService {
     }
 
     @Override
-    public void createGenre(String genre) {
+    public void createGenre(Genre genre) {
         try (Connection connection = DriverManager.getConnection(connectionSettings.getUrl(),
                 connectionSettings.getUsername(), connectionSettings.getPassword());
              PreparedStatement stmt = connection.prepareStatement(
                      "INSERT INTO genre (name) VALUES (?)")) {
-            stmt.setString(1, genre);
+            stmt.setString(1, genre.getName());
             stmt.execute();
         } catch (SQLException e) {
             LOG.error("Can't create genre '{}' in database! " +
@@ -250,7 +250,9 @@ public class PostgreDBService implements DBService {
             while (rs.next()) {
                 Author author = getAuthorByID(rs.getInt(3));
                 Book book = new Book(rs.getInt(1), rs.getString(2), author,
-                        rs.getString(4), rs.getString(5), rs.getInt(6), rs.getString(7));
+                        new Genre(rs.getString(4)),
+                        new Category(rs.getString(5)),
+                        rs.getInt(6), rs.getString(7));
                 books.add(book);
             }
         } catch (SQLException e) {
@@ -272,7 +274,9 @@ public class PostgreDBService implements DBService {
                 if (rs.next()) {
                     Author author = getAuthorByID(rs.getInt(3));
                     return new Book(rs.getInt(1), rs.getString(2), author,
-                            rs.getString(4), rs.getString(5), rs.getInt(6), rs.getString(7));
+                            new Genre(rs.getString(4)),
+                            new Category(rs.getString(5)),
+                            rs.getInt(6), rs.getString(7));
                 }
             }
         } catch (SQLException e) {
@@ -305,15 +309,15 @@ public class PostgreDBService implements DBService {
     }
 
     @Override
-    public List<String> getAllGenres() {
-        List<String> genres = new ArrayList<>();
+    public List<Genre> getAllGenres() {
+        List<Genre> genres = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(connectionSettings.getUrl(),
                 connectionSettings.getUsername(), connectionSettings.getPassword());
              PreparedStatement stmt = connection.prepareStatement(
                      "SELECT name FROM genre");
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                genres.add(rs.getString(1));
+                genres.add(new Genre(rs.getString(1)));
             }
         } catch (SQLException e) {
             LOG.error("Can't get all genres from database! " +
@@ -388,15 +392,15 @@ public class PostgreDBService implements DBService {
     }
 
     @Override
-    public List<String> getAllCategories() {
-        List<String> categories = new ArrayList<>();
+    public List<Category> getAllCategories() {
+        List<Category> categories = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(connectionSettings.getUrl(),
                 connectionSettings.getUsername(), connectionSettings.getPassword());
              PreparedStatement stmt = connection.prepareStatement(
                      "SELECT name FROM category");
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                categories.add(rs.getString(1));
+                categories.add(new Category(rs.getString(1)));
             }
         } catch (SQLException e) {
             LOG.error("Can't get all categories from database! " +
@@ -601,7 +605,9 @@ public class PostgreDBService implements DBService {
                 while (rs.next()) {
                     Author author = getAuthorByID(rs.getInt(3));
                     Book book = new Book(rs.getInt(1), rs.getString(2), author,
-                            rs.getString(4), rs.getString(5), rs.getInt(6), rs.getString(7));
+                            new Genre(rs.getString(4)),
+                            new Category(rs.getString(5)),
+                            rs.getInt(6), rs.getString(7));
                     books.add(book);
                 }
             }

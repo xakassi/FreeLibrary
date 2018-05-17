@@ -1,10 +1,24 @@
 package library.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "author")
 public class Author {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "firstname", nullable = false)
     private String firstName;
+
+    @Column(name = "secondname")
     private String secondName;
+
+    @Column(name = "lastname", nullable = false)
     private String lastName;
+
+    @Column
     private int century;
 
     public Author(int id, String firstName, String secondName, String lastName, int century) {

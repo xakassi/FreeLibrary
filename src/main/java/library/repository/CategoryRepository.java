@@ -1,9 +1,9 @@
 package library.repository;
 
-import library.model.Book;
+import library.model.Category;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BookRepository extends CrudRepository<Book, Integer> {
+public interface CategoryRepository extends CrudRepository<Category, String> {
 }

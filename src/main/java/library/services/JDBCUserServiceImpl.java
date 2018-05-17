@@ -3,10 +3,10 @@ package library.services;
 import library.model.User;
 import org.mindrot.jbcrypt.BCrypt;
 
-public class UserServiceImpl implements UserService {
+public class JDBCUserServiceImpl implements UserService {
     private DBService dbService;
 
-    public UserServiceImpl(DBService dbService) {
+    public JDBCUserServiceImpl(DBService dbService) {
         this.dbService = dbService;
     }
 

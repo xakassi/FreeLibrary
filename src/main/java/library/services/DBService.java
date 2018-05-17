@@ -83,7 +83,7 @@ public interface DBService {
      * @param popularity  is the popularity level of this book
      * @param description is the description for this book
      */
-    void createBook(String bookName, int authorID, String genre, String category,
+    void createBook(String bookName, int authorID, Genre genre, Category category,
                     int popularity, String description);
 
     /**
@@ -108,7 +108,7 @@ public interface DBService {
      *
      * @param genre is the name of new genre
      */
-    void createGenre(String genre);
+    void createGenre(Genre genre);
 
     /**
      * Get all books from database
@@ -139,7 +139,7 @@ public interface DBService {
      *
      * @return list of all genres
      */
-    List<String> getAllGenres();
+    List<Genre> getAllGenres();
 
     /**
      * Get all authors from database
@@ -171,7 +171,7 @@ public interface DBService {
      *
      * @return list of all categories
      */
-    List<String> getAllCategories();
+    List<Category> getAllCategories();
 
     /**
      * Get all notifications for user {@code userLogin} from database

@@ -1,31 +1,38 @@
 package library.services;
 
-import library.model.Author;
-import library.model.Book;
-import library.model.BookSearchRequest;
+import library.model.*;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.*;
 
 public class SearchServiceTest {
     private Author[] testAuthors;
     private Book[] testBooks;
+    private Genre[] genres;
+    private Category[] categories;
 
     {
+        genres = new Genre[]{new Genre("classic"), new Genre("fantasy")};
+
+        categories = new Category[]{new Category("adults"), new Category("teenagers")};
+
         testAuthors = new Author[]{new Author(1, "Фёдор", "Михайлович", "Достоевский", 19),
                 new Author(2, "Виктор", "", "Гюго", 19),
                 new Author(3, "Джоан", "", "Роулинг", 21)};
 
         testBooks = new Book[]{new Book(1, "Братья Карамазовы", testAuthors[0],
-                "classic", "adults", 5, ""),
+                genres[0], categories[0], 5, ""),
                 new Book(2, "Идиот", testAuthors[0],
-                        "classic", "adults", 9, ""),
+                        genres[0], categories[0], 9, ""),
                 new Book(3, "Отверженные", testAuthors[1],
-                        "classic", "adults", 6, ""),
+                        genres[0], categories[0], 6, ""),
                 new Book(4, "Гарри Поттер и Философский камень", testAuthors[2],
-                        "fantasy", "teenagers", 15, "")};
+                        genres[1], categories[1], 15, "")};
     }
 
     private SearchService searchService;
@@ -71,7 +78,7 @@ public class SearchServiceTest {
     }
 
     @After
-    public void clearRequestsAndExpectations(){
+    public void clearRequestsAndExpectations() {
         requestsAndExpectedValues.clear();
     }
 

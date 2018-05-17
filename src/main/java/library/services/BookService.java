@@ -1,8 +1,6 @@
 package library.services;
 
-import library.model.Author;
-import library.model.Book;
-import library.model.UncheckedBook;
+import library.model.*;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -32,14 +30,14 @@ public interface BookService {
      *
      * @return list of all genres in library
      */
-    List<String> getAllGenres();
+    List<Genre> getAllGenres();
 
     /**
      * Get all categories of books
      *
      * @return list of all categories in library
      */
-    List<String> getAllCategories();
+    List<Category> getAllCategories();
 
     /**
      * Get set of all unchecked books
@@ -82,7 +80,7 @@ public interface BookService {
      * @param genre is the searching genre
      * @return {@code true} if tge genre exist in the library
      */
-    Boolean isGenreExist(String genre);
+    Boolean isGenreExist(Genre genre);
 
     /**
      * Add a new book with following parameters in the library
@@ -98,7 +96,7 @@ public interface BookService {
      * @return {@code true} if the book was successfully added
      */
     Boolean addNewBook(String bookName, String authorFirstName, String authorSecondName,
-                       String authorLastName, String genre, String category,
+                       String authorLastName, Genre genre, Category category,
                        int popularity, String description);
 
     /**

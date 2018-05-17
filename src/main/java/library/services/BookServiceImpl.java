@@ -1,9 +1,7 @@
 package library.services;
 
 import library.config.LibrarySettings;
-import library.model.Author;
-import library.model.Book;
-import library.model.UncheckedBook;
+import library.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,8 +10,8 @@ import java.io.File;
 import java.util.*;
 
 public class BookServiceImpl implements BookService {
-    private List<String> genres;
-    private List<String> categories;
+    private List<Genre> genres;
+    private List<Category> categories;
     private Set<UncheckedBook> uncheckedBookSet;
 
     private DBService dbService;
@@ -39,7 +37,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<String> getAllGenres() {
+    public List<Genre> getAllGenres() {
         if (genres == null) {
             synchronized (this) {
                 genres = dbService.getAllGenres();
@@ -52,7 +50,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<String> getAllCategories() {
+    public List<Category> getAllCategories() {
         if (categories == null) {
             synchronized (this) {
                 categories = dbService.getAllCategories();
@@ -95,13 +93,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Boolean isGenreExist(String genre) {
+    public Boolean isGenreExist(Genre genre) {
         return genres.contains(genre);
     }
 
     @Override
     synchronized public Boolean addNewBook(String bookName, String authorFirstName, String authorSecondName,
-                                           String authorLastName, String genre, String category,
+                                           String authorLastName, Genre genre, Category category,
                                            int popularity, String description) {
         Author author = getAuthorByFullName(authorFirstName, authorSecondName, authorLastName);
         if (author == null) {

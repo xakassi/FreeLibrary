@@ -1,6 +1,5 @@
 package library.config;
 
-import library.repository.UserRepository;
 import library.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +21,7 @@ public class ServicesConfiguration {
     @Bean
     public UserService getUserService(@Autowired DBService dbService) {
 
-        return new UserServiceImpl(dbService);
+        return new JDBCUserServiceImpl(dbService);
     }
 
     @Bean
