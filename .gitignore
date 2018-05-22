@@ -4,4 +4,3 @@ src/main/resources/keystore.p12
 target/
 *.iml
 TestOutputFile.txt
-*/Thumbs.db
