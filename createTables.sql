@@ -86,7 +86,7 @@ SELECT * FROM book;
 
 CREATE TABLE notification (
     id BIGSERIAL PRIMARY KEY,
-	userID int REFERENCES libUser(id),
+	user int REFERENCES libUser(id),
 	notice text,
 	notifDate date
 );
@@ -95,7 +95,7 @@ SELECT * FROM notification;
 
 CREATE TABLE uncheckedBook (
     id BIGSERIAL PRIMARY KEY,
-	userID int REFERENCES libUser(id),
+	user int REFERENCES libUser(id),
 	bookname text,
 	author text,
 	description text

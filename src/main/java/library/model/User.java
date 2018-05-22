@@ -1,11 +1,27 @@
 package library.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "libuser")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(unique = true, nullable = false)
     private String login;
+
+    @Column(name = "firstname", nullable = false)
     private String firstName;
+
+    @Column(name = "lastname", nullable = false)
     private String lastName;
+
+    @Column(name = "passwordhash", nullable = false)
     private String passwordHash;
+
+    @Column(name = "urole")
     private String role;
 
     public User(int id, String login, String firstName, String lastName, String passwordHash, String role) {
@@ -24,6 +40,14 @@ public class User {
         this.lastName = user.lastName;
         this.passwordHash = user.passwordHash;
         this.role = user.role;
+    }
+
+    public User(String login, String firstName, String lastName, String passwordHash, String role) {
+        this.login = login;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.passwordHash = passwordHash;
+        this.role = role;
     }
 
     public User() {

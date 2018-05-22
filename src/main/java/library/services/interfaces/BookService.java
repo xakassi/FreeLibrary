@@ -1,8 +1,6 @@
-package library.services;
+package library.services.interfaces;
 
-import library.model.Author;
-import library.model.Book;
-import library.model.UncheckedBook;
+import library.model.*;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -32,14 +30,14 @@ public interface BookService {
      *
      * @return list of all genres in library
      */
-    List<String> getAllGenres();
+    List<Genre> getAllGenres();
 
     /**
      * Get all categories of books
      *
      * @return list of all categories in library
      */
-    List<String> getAllCategories();
+    List<Category> getAllCategories();
 
     /**
      * Get set of all unchecked books
@@ -82,7 +80,7 @@ public interface BookService {
      * @param genre is the searching genre
      * @return {@code true} if tge genre exist in the library
      */
-    Boolean isGenreExist(String genre);
+    Boolean isGenreExist(Genre genre);
 
     /**
      * Add a new book with following parameters in the library
@@ -98,7 +96,7 @@ public interface BookService {
      * @return {@code true} if the book was successfully added
      */
     Boolean addNewBook(String bookName, String authorFirstName, String authorSecondName,
-                       String authorLastName, String genre, String category,
+                       String authorLastName, Genre genre, Category category,
                        int popularity, String description);
 
     /**
@@ -128,12 +126,12 @@ public interface BookService {
     /**
      * Add unchecked book with following parameters to the queue of unchecked books
      *
-     * @param userID      is an id of user who offers this book to the library
+     * @param user        is an user who offers this book to the library
      * @param bookName    is a book name given it by the user
      * @param author      is the author surname or full name written by user
      * @param description is the description for book given by user
      */
-    void addNewUncheckedBook(int userID, String bookName, String author, String description);
+    void addNewUncheckedBook(User user, String bookName, String author, String description);
 
     /**
      * Delete unchecked book
@@ -157,11 +155,23 @@ public interface BookService {
     void acceptUncheckedBook(UncheckedBook uncheckedBook, Book newBook);
 
     /**
-     * Check an extension of the file, it should be text file (some most popular formats)
+     * Check an extension of the file,
+     * it should be text file (some most popular formats)
      *
      * @param fileName is the name of file for checking
-     * @return {@code true} if the file has an text extension, else {@code false}
+     * @return {@code true} if the file
+     * has an text extension, else {@code false}
      */
-    Boolean isExtensionValid(String fileName);
+    default Boolean isExtensionValid(String fileName) {
+        return validExtensions.contains(getFileExtension(fileName));
+    }
+
+    default String getFileExtension(String fileName) {
+        if (fileName.lastIndexOf(".") != -1
+                && fileName.lastIndexOf(".") != 0) {
+            return fileName.substring(fileName.lastIndexOf(".") + 1);
+        }
+        return "";
+    }
 
 }

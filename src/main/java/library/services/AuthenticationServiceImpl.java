@@ -1,6 +1,8 @@
 package library.services;
 
 import library.model.User;
+import library.services.interfaces.AuthenticationService;
+import library.services.interfaces.UserService;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class AuthenticationServiceImpl implements AuthenticationService {

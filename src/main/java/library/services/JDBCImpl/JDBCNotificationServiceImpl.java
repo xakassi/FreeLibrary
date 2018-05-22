@@ -1,14 +1,17 @@
-package library.services;
+package library.services.JDBCImpl;
 
 import library.model.Notification;
+import library.model.User;
+import library.services.interfaces.DBService;
+import library.services.interfaces.NotificationService;
 
 import java.sql.Date;
 import java.util.List;
 
-public class NotificationServiceImpl implements NotificationService {
+public class JDBCNotificationServiceImpl implements NotificationService {
     private DBService dbService;
 
-    public NotificationServiceImpl(DBService dbService) {
+    public JDBCNotificationServiceImpl(DBService dbService) {
         this.dbService = dbService;
     }
 
@@ -19,9 +22,9 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public Notification createNotification(int userID, String text) {
+    public Notification createNotification(User user, String text) {
         Date sqlDate = new java.sql.Date(System.currentTimeMillis());
-        return dbService.createNotificationForUser(userID, text, sqlDate);
+        return dbService.createNotificationForUser(user.getId(), text, sqlDate);
     }
 
     @Override

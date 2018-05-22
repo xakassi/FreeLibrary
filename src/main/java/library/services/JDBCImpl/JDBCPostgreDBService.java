@@ -1,7 +1,9 @@
-package library.services;
+package library.services.JDBCImpl;
 
 import library.config.ConnectionSettings;
 import library.model.*;
+import library.services.interfaces.DBService;
+import library.services.interfaces.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -12,13 +14,13 @@ import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 
-public class PostgreDBService implements DBService {
+public class JDBCPostgreDBService implements DBService {
     private ConnectionSettings connectionSettings;
 
-    private static final Logger LOG = LoggerFactory.getLogger(PostgreDBService.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(JDBCPostgreDBService.class.getName());
     private static final Marker FATAL = MarkerFactory.getMarker("FATAL");
 
-    public PostgreDBService(ConnectionSettings connectionSettings) {
+    public JDBCPostgreDBService(ConnectionSettings connectionSettings) {
         this.connectionSettings = connectionSettings;
     }
 
@@ -31,7 +33,7 @@ public class PostgreDBService implements DBService {
         try {
             Class.forName(connectionSettings.getDriverClassName());
         } catch (ClassNotFoundException e) {
-            LOG.error(FATAL, "Can't connect to the database! Class PostgreDBService, method connect().");
+            LOG.error(FATAL, "Can't connect to the database! Class JDBCPostgreDBService, method connect().");
         }
     }
 
@@ -53,7 +55,7 @@ public class PostgreDBService implements DBService {
             return getUserByLogin(login);
         } catch (SQLException e) {
             LOG.error("Can't create the user '{}' in database! " +
-                            "Class PostgreDBService, method createUser().",
+                            "Class JDBCPostgreDBService, method createUser().",
                     login, e);
         }
         return null;
@@ -76,7 +78,7 @@ public class PostgreDBService implements DBService {
             }
         } catch (SQLException e) {
             LOG.error("Can't get user by login {} from database! " +
-                    "Class PostgreDBService, method getUserByLogin().", login, e);
+                    "Class JDBCPostgreDBService, method getUserByLogin().", login, e);
         }
         return null;
     }
@@ -98,7 +100,7 @@ public class PostgreDBService implements DBService {
             }
         } catch (SQLException e) {
             LOG.error("Can't get user by id {} from database! " +
-                    "Class PostgreDBService, method getUserByID().", id, e);
+                    "Class JDBCPostgreDBService, method getUserByID().", id, e);
         }
         return null;
     }
@@ -113,7 +115,7 @@ public class PostgreDBService implements DBService {
             stmt.execute();
         } catch (SQLException e) {
             LOG.error("Can't delete the user '{}' from database! " +
-                    "Class PostgreDBService, method deleteUser().", id, e);
+                    "Class JDBCPostgreDBService, method deleteUser().", id, e);
         }
     }
 
@@ -128,7 +130,7 @@ public class PostgreDBService implements DBService {
             stmt.execute();
         } catch (SQLException e) {
             LOG.error("Can't update user first name '{}' for user login {} from database! " +
-                            "Class PostgreDBService, method updateUserFirstName().",
+                            "Class JDBCPostgreDBService, method updateUserFirstName().",
                     newFirstName, userID, e);
         }
     }
@@ -144,7 +146,7 @@ public class PostgreDBService implements DBService {
             stmt.execute();
         } catch (SQLException e) {
             LOG.error("Can't update user last name '{}' for user login {} from database! " +
-                            "Class PostgreDBService, method updateUserLastName().",
+                            "Class JDBCPostgreDBService, method updateUserLastName().",
                     newLastName, userID, e);
         }
     }
@@ -160,13 +162,13 @@ public class PostgreDBService implements DBService {
             stmt.execute();
         } catch (SQLException e) {
             LOG.error("Can't update user password '{}' for user login {} from database! " +
-                            "Class PostgreDBService, method updateUserPassword().",
+                            "Class JDBCPostgreDBService, method updateUserPassword().",
                     newPasswordHash, userID, e);
         }
     }
 
     @Override
-    public void createBook(String bookName, int authorID, String genre, String category,
+    public void createBook(String bookName, int authorID, Genre genre, Category category,
                            int popularity, String description) {
         try (Connection connection = DriverManager.getConnection(connectionSettings.getUrl(),
                 connectionSettings.getUsername(), connectionSettings.getPassword());
@@ -176,14 +178,14 @@ public class PostgreDBService implements DBService {
                              "VALUES (?, ?, ?, ?, ?, ?)")) {
             stmt.setString(1, bookName);
             stmt.setInt(2, authorID);
-            stmt.setString(3, genre);
-            stmt.setString(4, category);
+            stmt.setString(3, genre.getName());
+            stmt.setString(4, category.getName());
             stmt.setInt(5, popularity);
             stmt.setString(6, description);
             stmt.execute();
         } catch (SQLException e) {
             LOG.error("Can't create the book '{}' in database! " +
-                    "Class PostgreDBService, method createBook().", bookName, e);
+                    "Class JDBCPostgreDBService, method createBook().", bookName, e);
         }
     }
 
@@ -198,7 +200,7 @@ public class PostgreDBService implements DBService {
                 stmt.execute();
             } catch (SQLException e) {
                 LOG.error("Can't delete the book with id {} from database! " +
-                        "Class PostgreDBService, method deleteBook().", id, e);
+                        "Class JDBCPostgreDBService, method deleteBook().", id, e);
             }
         }
     }
@@ -218,22 +220,22 @@ public class PostgreDBService implements DBService {
             stmt.execute();
         } catch (SQLException e) {
             LOG.error("Can't create the author {} {} {} in database! " +
-                            "Class PostgreDBService, method createAuthor().",
+                            "Class JDBCPostgreDBService, method createAuthor().",
                     firstName, secondName, lastName, e);
         }
     }
 
     @Override
-    public void createGenre(String genre) {
+    public void createGenre(Genre genre) {
         try (Connection connection = DriverManager.getConnection(connectionSettings.getUrl(),
                 connectionSettings.getUsername(), connectionSettings.getPassword());
              PreparedStatement stmt = connection.prepareStatement(
                      "INSERT INTO genre (name) VALUES (?)")) {
-            stmt.setString(1, genre);
+            stmt.setString(1, genre.getName());
             stmt.execute();
         } catch (SQLException e) {
             LOG.error("Can't create genre '{}' in database! " +
-                    "Class PostgreDBService, method createGenre().", genre, e);
+                    "Class JDBCPostgreDBService, method createGenre().", genre, e);
         }
     }
 
@@ -250,12 +252,14 @@ public class PostgreDBService implements DBService {
             while (rs.next()) {
                 Author author = getAuthorByID(rs.getInt(3));
                 Book book = new Book(rs.getInt(1), rs.getString(2), author,
-                        rs.getString(4), rs.getString(5), rs.getInt(6), rs.getString(7));
+                        new Genre(rs.getString(4)),
+                        new Category(rs.getString(5)),
+                        rs.getInt(6), rs.getString(7));
                 books.add(book);
             }
         } catch (SQLException e) {
             LOG.error("Can't get all books from database! " +
-                    "Class PostgreDBService, method getAllBooks().", e);
+                    "Class JDBCPostgreDBService, method getAllBooks().", e);
         }
         return books;
     }
@@ -272,12 +276,14 @@ public class PostgreDBService implements DBService {
                 if (rs.next()) {
                     Author author = getAuthorByID(rs.getInt(3));
                     return new Book(rs.getInt(1), rs.getString(2), author,
-                            rs.getString(4), rs.getString(5), rs.getInt(6), rs.getString(7));
+                            new Genre(rs.getString(4)),
+                            new Category(rs.getString(5)),
+                            rs.getInt(6), rs.getString(7));
                 }
             }
         } catch (SQLException e) {
             LOG.error("Can't get book by id {} from database! " +
-                            "Class PostgreDBService, method getBookIDByNameAndAuthor().",
+                            "Class JDBCPostgreDBService, method getBookIDByNameAndAuthor().",
                     id, e);
         }
         return null;
@@ -298,26 +304,26 @@ public class PostgreDBService implements DBService {
             }
         } catch (SQLException e) {
             LOG.error("Can't get book by name '{}' and author id = {} from database! " +
-                            "Class PostgreDBService, method getBookIDByNameAndAuthor().",
+                            "Class JDBCPostgreDBService, method getBookIDByNameAndAuthor().",
                     bookName, authorID, e);
         }
         return 0;
     }
 
     @Override
-    public List<String> getAllGenres() {
-        List<String> genres = new ArrayList<>();
+    public List<Genre> getAllGenres() {
+        List<Genre> genres = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(connectionSettings.getUrl(),
                 connectionSettings.getUsername(), connectionSettings.getPassword());
              PreparedStatement stmt = connection.prepareStatement(
                      "SELECT name FROM genre");
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                genres.add(rs.getString(1));
+                genres.add(new Genre(rs.getString(1)));
             }
         } catch (SQLException e) {
             LOG.error("Can't get all genres from database! " +
-                    "Class PostgreDBService, method getAllGenres().", e);
+                    "Class JDBCPostgreDBService, method getAllGenres().", e);
         }
         return genres;
     }
@@ -336,7 +342,7 @@ public class PostgreDBService implements DBService {
             }
         } catch (SQLException e) {
             LOG.error("Can't get all authors from database! " +
-                    "Class PostgreDBService, method getAllAuthors().", e);
+                    "Class JDBCPostgreDBService, method getAllAuthors().", e);
         }
         return authors;
     }
@@ -359,7 +365,7 @@ public class PostgreDBService implements DBService {
             }
         } catch (SQLException e) {
             LOG.error("Can't get author by full name {} {} {} from database! " +
-                            "Class PostgreDBService, method getAuthorByFullName().",
+                            "Class JDBCPostgreDBService, method getAuthorByFullName().",
                     firstName, secondName, lastName, e);
         }
         return null;
@@ -381,26 +387,26 @@ public class PostgreDBService implements DBService {
             }
         } catch (SQLException e) {
             LOG.error("Can't get author by id = {} from database! " +
-                            "Class PostgreDBService, method getAuthorByID().",
+                            "Class JDBCPostgreDBService, method getAuthorByID().",
                     id, e);
         }
         return null;
     }
 
     @Override
-    public List<String> getAllCategories() {
-        List<String> categories = new ArrayList<>();
+    public List<Category> getAllCategories() {
+        List<Category> categories = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(connectionSettings.getUrl(),
                 connectionSettings.getUsername(), connectionSettings.getPassword());
              PreparedStatement stmt = connection.prepareStatement(
                      "SELECT name FROM category");
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                categories.add(rs.getString(1));
+                categories.add(new Category(rs.getString(1)));
             }
         } catch (SQLException e) {
             LOG.error("Can't get all categories from database! " +
-                    "Class PostgreDBService, method getAllCategories().", e);
+                    "Class JDBCPostgreDBService, method getAllCategories().", e);
         }
         return categories;
     }
@@ -416,13 +422,14 @@ public class PostgreDBService implements DBService {
             stmt.setInt(1, userID);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    notifications.add(new Notification(rs.getInt(1), userID,
+                    User user = getUserByID(userID);
+                    notifications.add(new Notification(rs.getInt(1), user,
                             rs.getString(3), rs.getDate(4)));
                 }
             }
         } catch (SQLException e) {
             LOG.error("Can't get notifications for user {} from database! " +
-                    "Class PostgreDBService, method getNotificationsForUser().", userID, e);
+                    "Class JDBCPostgreDBService, method getNotificationsForUser().", userID, e);
         }
         return notifications;
     }
@@ -438,10 +445,11 @@ public class PostgreDBService implements DBService {
             stmt.setDate(3, date);
             stmt.execute();
             int id = getNotificationID(userID, text, date);
-            return new Notification(id, userID, text, date);
+            User user = getUserByID(userID);
+            return new Notification(id, user, text, date);
         } catch (SQLException e) {
             LOG.error("Can't create notification '{}' for user {} in database! " +
-                            "Class PostgreDBService, method createNotificationForUser().",
+                            "Class JDBCPostgreDBService, method createNotificationForUser().",
                     text, userID, e);
         }
         return null;
@@ -465,7 +473,7 @@ public class PostgreDBService implements DBService {
         } catch (SQLException e) {
             LOG.error("Can't get notification id for user {}" +
                             "with text '{}' and date {} from database! " +
-                            "Class PostgreDBService, method getNotificationID().",
+                            "Class JDBCPostgreDBService, method getNotificationID().",
                     userID, text, date, e);
         }
         return 0;
@@ -481,13 +489,14 @@ public class PostgreDBService implements DBService {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new Notification(id, rs.getInt(2), rs.getString(3),
+                    User user = getUserByID(rs.getInt(2));
+                    return new Notification(id, user, rs.getString(3),
                             rs.getDate(4));
                 }
             }
         } catch (SQLException e) {
             LOG.error("Can't get notification by id {}!" +
-                            "Class PostgreDBService, method getNotificationID().",
+                            "Class JDBCPostgreDBService, method getNotificationID().",
                     id, e);
         }
         return null;
@@ -503,7 +512,7 @@ public class PostgreDBService implements DBService {
             stmt.execute();
         } catch (SQLException e) {
             LOG.error("Can't delete notification with id {} from database! " +
-                    "Class PostgreDBService, method deleteNotification().", id, e);
+                    "Class JDBCPostgreDBService, method deleteNotification().", id, e);
         }
     }
 
@@ -516,13 +525,14 @@ public class PostgreDBService implements DBService {
                      "SELECT id, userid, bookname, author, description FROM uncheckedbook");
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
+                User user = getUserByID(rs.getInt(2));
                 uncheckedBookSet.add(
-                        new UncheckedBook(rs.getInt(1), rs.getInt(2), rs.getString(3),
+                        new UncheckedBook(rs.getInt(1), user, rs.getString(3),
                                 rs.getString(4), rs.getString(5)));
             }
         } catch (SQLException e) {
             LOG.error("Can't get all unchecked books from database! " +
-                    "Class PostgreDBService, method getAllUncheckedBooks().", e);
+                    "Class JDBCPostgreDBService, method getAllUncheckedBooks().", e);
         }
         return uncheckedBookSet;
     }
@@ -537,7 +547,7 @@ public class PostgreDBService implements DBService {
             stmt.execute();
         } catch (SQLException e) {
             LOG.error("Can't delete theunchecked book with id {} from database! " +
-                    "Class PostgreDBService, method deleteUncheckedBook().", id, e);
+                    "Class JDBCPostgreDBService, method deleteUncheckedBook().", id, e);
         }
     }
 
@@ -556,10 +566,11 @@ public class PostgreDBService implements DBService {
             stmt.setString(4, description);
             stmt.execute();
             int id = getIDOfUncheckedBook(userID, bookName, author, description);
-            return new UncheckedBook(id, userID, bookName, author, description);
+            User user = getUserByID(userID);
+            return new UncheckedBook(id, user, bookName, author, description);
         } catch (SQLException e) {
             LOG.error("Can't create the unchecked book '{}' in database! " +
-                    "Class PostgreDBService, method createUncheckedBook().", bookName, e);
+                    "Class JDBCPostgreDBService, method createUncheckedBook().", bookName, e);
         }
         return null;
     }
@@ -582,7 +593,7 @@ public class PostgreDBService implements DBService {
             }
         } catch (SQLException e) {
             LOG.error("Can't get id of unchecked book {} {} {} {} from database! " +
-                            "Class PostgreDBService, method getAuthorByFullName().",
+                            "Class JDBCPostgreDBService, method getAuthorByFullName().",
                     userID, bookName, author, description, e);
         }
         return 0;
@@ -601,13 +612,15 @@ public class PostgreDBService implements DBService {
                 while (rs.next()) {
                     Author author = getAuthorByID(rs.getInt(3));
                     Book book = new Book(rs.getInt(1), rs.getString(2), author,
-                            rs.getString(4), rs.getString(5), rs.getInt(6), rs.getString(7));
+                            new Genre(rs.getString(4)),
+                            new Category(rs.getString(5)),
+                            rs.getInt(6), rs.getString(7));
                     books.add(book);
                 }
             }
         } catch (SQLException e) {
             LOG.error("Can't search books by request '{}' from database! " +
-                            "Class PostgreDBService, method searchBooksByRequest().",
+                            "Class JDBCPostgreDBService, method searchBooksByRequest().",
                     sqlString, Arrays.asList(parameters), e);
         }
         return books;

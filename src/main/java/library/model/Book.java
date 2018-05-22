@@ -1,17 +1,48 @@
 package library.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "book")
 public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false)
     private String name;
+
+    @ManyToOne(optional = false, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "authorid")
     private Author author;
-    private String genre;
-    private String category;
+
+    @ManyToOne(optional = false, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "genreid")
+    private Genre genre;
+
+    @ManyToOne(optional = false, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "categoryid")
+    private Category category;
+
+    @Column
     private int popularity;
+
+    @Column
     private String description;
 
-    public Book(int id, String name, Author author, String genre,
-                String category, int popularity, String description) {
+    public Book(int id, String name, Author author, Genre genre,
+                Category category, int popularity, String description) {
         this.id = id;
+        this.name = name;
+        this.author = author;
+        this.genre = genre;
+        this.category = category;
+        this.popularity = popularity;
+        this.description = description;
+    }
+
+    public Book(String name, Author author, Genre genre,
+                Category category, int popularity, String description) {
         this.name = name;
         this.author = author;
         this.genre = genre;
@@ -27,11 +58,11 @@ public class Book {
         this.author = author;
     }
 
-    public String getGenre() {
+    public Genre getGenre() {
         return genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(Genre genre) {
         this.genre = genre;
     }
 
@@ -47,7 +78,7 @@ public class Book {
         this.author = author;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
@@ -71,7 +102,7 @@ public class Book {
         return author;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 

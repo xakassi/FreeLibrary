@@ -5,9 +5,9 @@ import library.model.Author;
 import library.model.Book;
 import library.model.UncheckedBook;
 import library.model.User;
-import library.services.BookService;
-import library.services.NotificationService;
-import library.services.UserService;
+import library.services.interfaces.BookService;
+import library.services.interfaces.NotificationService;
+import library.services.interfaces.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,7 +148,7 @@ public class UncheckedBookController {
             return new ModelAndView("redirect:" + "/unch-book-info?getId=" + unchBookID);
         } else {
             bookService.acceptUncheckedBook(uncheckedBook, book);
-            notificationService.createNotification(uncheckedBook.getUserID(), "Your book \"" +
+            notificationService.createNotification(uncheckedBook.getUser(), "Your book \"" +
                     uncheckedBook.getBookName() + "\" is successfully added to the library as " +
                     book + ".");
 
@@ -170,7 +170,7 @@ public class UncheckedBookController {
         UncheckedBook uncheckedBook = bookService.getUncheckedBookById(unchBookID);
 
         bookService.refuseUncheckedBook(uncheckedBook);
-        notificationService.createNotification(uncheckedBook.getUserID(), "Your book \"" +
+        notificationService.createNotification(uncheckedBook.getUser(), "Your book \"" +
                 uncheckedBook.getBookName() + "\" will not be added to the library.");
 
         redirect.addFlashAttribute("message", "The book is refused.");

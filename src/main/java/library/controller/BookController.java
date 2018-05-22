@@ -2,10 +2,10 @@ package library.controller;
 
 import library.config.LibrarySettings;
 import library.model.*;
-import library.services.BookService;
-import library.services.NotificationService;
-import library.services.SearchService;
-import library.services.UserService;
+import library.services.interfaces.BookService;
+import library.services.interfaces.NotificationService;
+import library.services.interfaces.SearchService;
+import library.services.interfaces.UserService;
 import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -191,7 +191,7 @@ public class BookController {
                                    HttpServletResponse response) throws IOException {
 
         Notification notification = notificationService.getNotificationByID(notifID);
-        if (notification != null && notification.getUserID() == user.getId()) {
+        if (notification != null && notification.getUser().getId() == user.getId()) {
             notificationService.deleteNotification(notification);
         }
         response.sendRedirect("/upload");
@@ -257,8 +257,8 @@ public class BookController {
                     return new ModelAndView("redirect:" + "/upload");
                 }
 
-                uncheckedBook.setUserID(user.getId());
-                bookService.addNewUncheckedBook(uncheckedBook.getUserID(),
+                uncheckedBook.setUser(user);
+                bookService.addNewUncheckedBook(uncheckedBook.getUser(),
                         name, uncheckedBook.getAuthor(),
                         uncheckedBook.getDescription());
 

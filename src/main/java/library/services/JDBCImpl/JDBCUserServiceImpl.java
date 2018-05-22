@@ -1,12 +1,14 @@
-package library.services;
+package library.services.JDBCImpl;
 
 import library.model.User;
+import library.services.interfaces.DBService;
+import library.services.interfaces.UserService;
 import org.mindrot.jbcrypt.BCrypt;
 
-public class UserServiceImpl implements UserService {
+public class JDBCUserServiceImpl implements UserService {
     private DBService dbService;
 
-    public UserServiceImpl(DBService dbService) {
+    public JDBCUserServiceImpl(DBService dbService) {
         this.dbService = dbService;
     }
 
@@ -33,8 +35,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteByLogin(String login) {
+
+    }
+
+    @Override
     public User getUserByLogin(String login) {
         return dbService.getUserByLogin(login);
+    }
+
+    @Override
+    public User getUserById(int id) {
+        return dbService.getUserByID(id);
     }
 
     @Override
@@ -48,8 +60,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updatePassword(int id, String password) {
-        String newPasswordHash = BCrypt.hashpw(password, BCrypt.gensalt());
+    public void updatePassword(int id, String newPassword) {
+        String newPasswordHash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
         dbService.updateUserPassword(id, newPasswordHash);
     }
 }

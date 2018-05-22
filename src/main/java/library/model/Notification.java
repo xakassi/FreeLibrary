@@ -1,18 +1,39 @@
 package library.model;
 
+import javax.persistence.*;
 import java.sql.Date;
 
+@Entity
+@Table(name = "notification")
 public class Notification implements Comparable<Notification> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int userID;
+
+    @ManyToOne(optional = false, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "userid")
+    private User user;
+
+    @Column(nullable = false)
     private String notice;
+
+    @Column(name ="notifdate", nullable = false)
     private Date date;
 
-    public Notification(int id, int userID, String notice, Date date) {
+    public Notification(int id, User user, String notice, Date date) {
         this.id = id;
-        this.userID = userID;
+        this.user = user;
         this.notice = notice;
         this.date = date;
+    }
+
+    public Notification(User user, String notice, Date date) {
+        this.user = user;
+        this.notice = notice;
+        this.date = date;
+    }
+
+    public Notification() {
     }
 
     public int getId() {
@@ -23,12 +44,12 @@ public class Notification implements Comparable<Notification> {
         this.id = id;
     }
 
-    public int getUserID() {
-        return userID;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void setNotice(String notice) {
@@ -50,7 +71,7 @@ public class Notification implements Comparable<Notification> {
 
     @Override
     public String toString() {
-        return new StringBuilder("Notification for user \'").append(userID).append("\':\n")
+        return new StringBuilder("Notification for user \'").append(user.getLogin()).append("\':\n")
                 .append(notice).append("\n").append(date).toString();
     }
 

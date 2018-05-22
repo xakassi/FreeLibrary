@@ -1,9 +1,9 @@
-package library.services;
+package library.services.JDBCImpl;
 
 import library.config.LibrarySettings;
-import library.model.Author;
-import library.model.Book;
-import library.model.UncheckedBook;
+import library.model.*;
+import library.services.interfaces.BookService;
+import library.services.interfaces.DBService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,17 +11,17 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.util.*;
 
-public class BookServiceImpl implements BookService {
-    private List<String> genres;
-    private List<String> categories;
+public class JDBCBookServiceImpl implements BookService {
+    private List<Genre> genres;
+    private List<Category> categories;
     private Set<UncheckedBook> uncheckedBookSet;
 
     private DBService dbService;
     private LibrarySettings librarySettings;
 
-    private static final Logger LOG = LoggerFactory.getLogger(BookServiceImpl.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(JDBCBookServiceImpl.class.getName());
 
-    public BookServiceImpl(DBService dbService, LibrarySettings librarySettings) {
+    public JDBCBookServiceImpl(DBService dbService, LibrarySettings librarySettings) {
         this.dbService = dbService;
         this.librarySettings = librarySettings;
     }
@@ -39,7 +39,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<String> getAllGenres() {
+    public List<Genre> getAllGenres() {
         if (genres == null) {
             synchronized (this) {
                 genres = dbService.getAllGenres();
@@ -52,7 +52,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<String> getAllCategories() {
+    public List<Category> getAllCategories() {
         if (categories == null) {
             synchronized (this) {
                 categories = dbService.getAllCategories();
@@ -95,13 +95,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Boolean isGenreExist(String genre) {
+    public Boolean isGenreExist(Genre genre) {
         return genres.contains(genre);
     }
 
     @Override
     synchronized public Boolean addNewBook(String bookName, String authorFirstName, String authorSecondName,
-                                           String authorLastName, String genre, String category,
+                                           String authorLastName, Genre genre, Category category,
                                            int popularity, String description) {
         Author author = getAuthorByFullName(authorFirstName, authorSecondName, authorLastName);
         if (author == null) {
@@ -140,9 +140,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void addNewUncheckedBook(int userID, String bookName,
+    public void addNewUncheckedBook(User user, String bookName,
                                     String author, String description) {
-        UncheckedBook uncheckedBook = dbService.createUncheckedBook(userID,
+        UncheckedBook uncheckedBook = dbService.createUncheckedBook(user.getId(),
                 bookName, author, description);
         uncheckedBookSet.add(uncheckedBook);
     }
@@ -177,19 +177,6 @@ public class BookServiceImpl implements BookService {
 
             dbService.deleteUncheckedBook(uncheckedBook.getId());
             uncheckedBookSet.remove(uncheckedBook);
-
         }
-    }
-
-    @Override
-    public Boolean isExtensionValid(String fileName) {
-        return validExtensions.contains(getFileExtension(fileName));
-    }
-
-    private String getFileExtension(String fileName) {
-        if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
-            return fileName.substring(fileName.lastIndexOf(".") + 1);
-        }
-        return "";
     }
 }
