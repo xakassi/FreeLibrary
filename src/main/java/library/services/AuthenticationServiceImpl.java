@@ -1,14 +1,14 @@
-package library.services.JDBCImpl;
+package library.services;
 
 import library.model.User;
 import library.services.interfaces.AuthenticationService;
 import library.services.interfaces.UserService;
 import org.mindrot.jbcrypt.BCrypt;
 
-public class JDBCAuthenticationServiceImpl implements AuthenticationService {
+public class AuthenticationServiceImpl implements AuthenticationService {
     private UserService userService;
 
-    public JDBCAuthenticationServiceImpl(UserService userService) {
+    public AuthenticationServiceImpl(UserService userService) {
         this.userService = userService;
     }
 

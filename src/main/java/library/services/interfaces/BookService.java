@@ -126,12 +126,12 @@ public interface BookService {
     /**
      * Add unchecked book with following parameters to the queue of unchecked books
      *
-     * @param userID      is an id of user who offers this book to the library
+     * @param user        is an user who offers this book to the library
      * @param bookName    is a book name given it by the user
      * @param author      is the author surname or full name written by user
      * @param description is the description for book given by user
      */
-    void addNewUncheckedBook(int userID, String bookName, String author, String description);
+    void addNewUncheckedBook(User user, String bookName, String author, String description);
 
     /**
      * Delete unchecked book
@@ -155,11 +155,23 @@ public interface BookService {
     void acceptUncheckedBook(UncheckedBook uncheckedBook, Book newBook);
 
     /**
-     * Check an extension of the file, it should be text file (some most popular formats)
+     * Check an extension of the file,
+     * it should be text file (some most popular formats)
      *
      * @param fileName is the name of file for checking
-     * @return {@code true} if the file has an text extension, else {@code false}
+     * @return {@code true} if the file
+     * has an text extension, else {@code false}
      */
-    Boolean isExtensionValid(String fileName);
+    default Boolean isExtensionValid(String fileName) {
+        return validExtensions.contains(getFileExtension(fileName));
+    }
+
+    default String getFileExtension(String fileName) {
+        if (fileName.lastIndexOf(".") != -1
+                && fileName.lastIndexOf(".") != 0) {
+            return fileName.substring(fileName.lastIndexOf(".") + 1);
+        }
+        return "";
+    }
 
 }

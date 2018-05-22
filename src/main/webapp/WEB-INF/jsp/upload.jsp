@@ -68,8 +68,7 @@ Free Library | <c:out value="${user.firstName}"/> <c:out value="${user.lastName}
                     <li>
                         <label>
                             <input type="radio" checked name="notifID"
-                                   value=
-                                       <c:out value="${n.id}"/>/>
+                                   value="${n.id}" />
                                 ${n.notice}
                             <br>
                                 ${n.date}

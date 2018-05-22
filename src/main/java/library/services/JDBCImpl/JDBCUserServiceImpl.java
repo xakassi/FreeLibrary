@@ -45,6 +45,11 @@ public class JDBCUserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserById(int id) {
+        return dbService.getUserByID(id);
+    }
+
+    @Override
     public void updateFirstName(int id, String newFirstName) {
         dbService.updateUserFirstName(id, newFirstName);
     }

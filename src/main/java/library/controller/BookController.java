@@ -191,7 +191,7 @@ public class BookController {
                                    HttpServletResponse response) throws IOException {
 
         Notification notification = notificationService.getNotificationByID(notifID);
-        if (notification != null && notification.getUserID() == user.getId()) {
+        if (notification != null && notification.getUser().getId() == user.getId()) {
             notificationService.deleteNotification(notification);
         }
         response.sendRedirect("/upload");
@@ -257,8 +257,8 @@ public class BookController {
                     return new ModelAndView("redirect:" + "/upload");
                 }
 
-                uncheckedBook.setUserID(user.getId());
-                bookService.addNewUncheckedBook(uncheckedBook.getUserID(),
+                uncheckedBook.setUser(user);
+                bookService.addNewUncheckedBook(uncheckedBook.getUser(),
                         name, uncheckedBook.getAuthor(),
                         uncheckedBook.getDescription());
 

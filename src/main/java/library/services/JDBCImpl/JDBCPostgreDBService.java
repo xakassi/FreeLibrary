@@ -3,6 +3,7 @@ package library.services.JDBCImpl;
 import library.config.ConnectionSettings;
 import library.model.*;
 import library.services.interfaces.DBService;
+import library.services.interfaces.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -421,7 +422,8 @@ public class JDBCPostgreDBService implements DBService {
             stmt.setInt(1, userID);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    notifications.add(new Notification(rs.getInt(1), userID,
+                    User user = getUserByID(userID);
+                    notifications.add(new Notification(rs.getInt(1), user,
                             rs.getString(3), rs.getDate(4)));
                 }
             }
@@ -443,7 +445,8 @@ public class JDBCPostgreDBService implements DBService {
             stmt.setDate(3, date);
             stmt.execute();
             int id = getNotificationID(userID, text, date);
-            return new Notification(id, userID, text, date);
+            User user = getUserByID(userID);
+            return new Notification(id, user, text, date);
         } catch (SQLException e) {
             LOG.error("Can't create notification '{}' for user {} in database! " +
                             "Class JDBCPostgreDBService, method createNotificationForUser().",
@@ -486,7 +489,8 @@ public class JDBCPostgreDBService implements DBService {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new Notification(id, rs.getInt(2), rs.getString(3),
+                    User user = getUserByID(rs.getInt(2));
+                    return new Notification(id, user, rs.getString(3),
                             rs.getDate(4));
                 }
             }
@@ -521,8 +525,9 @@ public class JDBCPostgreDBService implements DBService {
                      "SELECT id, userid, bookname, author, description FROM uncheckedbook");
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
+                User user = getUserByID(rs.getInt(2));
                 uncheckedBookSet.add(
-                        new UncheckedBook(rs.getInt(1), rs.getInt(2), rs.getString(3),
+                        new UncheckedBook(rs.getInt(1), user, rs.getString(3),
                                 rs.getString(4), rs.getString(5)));
             }
         } catch (SQLException e) {
@@ -561,7 +566,8 @@ public class JDBCPostgreDBService implements DBService {
             stmt.setString(4, description);
             stmt.execute();
             int id = getIDOfUncheckedBook(userID, bookName, author, description);
-            return new UncheckedBook(id, userID, bookName, author, description);
+            User user = getUserByID(userID);
+            return new UncheckedBook(id, user, bookName, author, description);
         } catch (SQLException e) {
             LOG.error("Can't create the unchecked book '{}' in database! " +
                     "Class JDBCPostgreDBService, method createUncheckedBook().", bookName, e);

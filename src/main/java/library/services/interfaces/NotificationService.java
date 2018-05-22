@@ -1,6 +1,7 @@
 package library.services.interfaces;
 
 import library.model.Notification;
+import library.model.User;
 
 import java.util.List;
 
@@ -22,13 +23,13 @@ public interface NotificationService {
     List<Notification> getNotificationsForUser(int userID);
 
     /**
-     * Create notification {@code text} for user {@code userLogin} with current time
+     * Create notification {@code text} for user {@code user} with current time
      *
-     * @param userID is the id of user
+     * @param user is the user
      * @param text   is the notice text
      * @return notification with these parameters and id
      */
-    Notification createNotification(int userID, String text);
+    Notification createNotification(User user, String text);
 
     /**
      * Get notification from list by its id and user login

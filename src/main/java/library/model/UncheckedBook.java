@@ -1,18 +1,47 @@
 package library.model;
 
+import javax.persistence.*;
+import java.util.Objects;
+
+@Entity
+@Table(name = "uncheckedbook")
 public class UncheckedBook {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int userID;
+
+    @ManyToOne(optional = false, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "userid")
+    private User user;
+
+    @Column(name = "bookname", nullable = false)
     private String bookName;
+
     private String author;
     private String description;
 
-    public UncheckedBook(int id, int userID, String bookName, String author, String description) {
+    public UncheckedBook(int id, User user, String bookName, String author, String description) {
         this.id = id;
-        this.userID = userID;
+        this.user = user;
         this.bookName = bookName;
         this.author = author;
         this.description = description;
+    }
+
+    public UncheckedBook(User user, String bookName,
+                         String author, String description) {
+        this.user = user;
+        this.bookName = bookName;
+        this.author = author;
+        this.description = description;
+    }
+
+    public UncheckedBook(UncheckedBook uncheckedBook) {
+        this.id = uncheckedBook.id;
+        this.user = uncheckedBook.user;
+        this.bookName = uncheckedBook.bookName;
+        this.author = uncheckedBook.author;
+        this.description = uncheckedBook.description;
     }
 
     public UncheckedBook() {
@@ -26,12 +55,12 @@ public class UncheckedBook {
         this.id = id;
     }
 
-    public int getUserID() {
-        return userID;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getBookName() {
@@ -61,5 +90,18 @@ public class UncheckedBook {
     @Override
     public String toString() {
         return bookName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UncheckedBook that = (UncheckedBook) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

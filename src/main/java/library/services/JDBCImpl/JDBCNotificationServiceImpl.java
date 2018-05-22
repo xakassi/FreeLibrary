@@ -1,6 +1,7 @@
 package library.services.JDBCImpl;
 
 import library.model.Notification;
+import library.model.User;
 import library.services.interfaces.DBService;
 import library.services.interfaces.NotificationService;
 
@@ -21,9 +22,9 @@ public class JDBCNotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public Notification createNotification(int userID, String text) {
+    public Notification createNotification(User user, String text) {
         Date sqlDate = new java.sql.Date(System.currentTimeMillis());
-        return dbService.createNotificationForUser(userID, text, sqlDate);
+        return dbService.createNotificationForUser(user.getId(), text, sqlDate);
     }
 
     @Override

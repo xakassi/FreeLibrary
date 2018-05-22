@@ -140,9 +140,9 @@ public class JDBCBookServiceImpl implements BookService {
     }
 
     @Override
-    public void addNewUncheckedBook(int userID, String bookName,
+    public void addNewUncheckedBook(User user, String bookName,
                                     String author, String description) {
-        UncheckedBook uncheckedBook = dbService.createUncheckedBook(userID,
+        UncheckedBook uncheckedBook = dbService.createUncheckedBook(user.getId(),
                 bookName, author, description);
         uncheckedBookSet.add(uncheckedBook);
     }
@@ -177,19 +177,6 @@ public class JDBCBookServiceImpl implements BookService {
 
             dbService.deleteUncheckedBook(uncheckedBook.getId());
             uncheckedBookSet.remove(uncheckedBook);
-
         }
-    }
-
-    @Override
-    public Boolean isExtensionValid(String fileName) {
-        return validExtensions.contains(getFileExtension(fileName));
-    }
-
-    private String getFileExtension(String fileName) {
-        if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
-            return fileName.substring(fileName.lastIndexOf(".") + 1);
-        }
-        return "";
     }
 }

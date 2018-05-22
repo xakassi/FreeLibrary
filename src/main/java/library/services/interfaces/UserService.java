@@ -52,6 +52,14 @@ public interface UserService {
     User getUserByLogin(String login);
 
     /**
+     * Get user by his unique id {@code id}
+     *
+     * @param id is the id of user
+     * @return user with this login
+     */
+    User getUserById(int id);
+
+    /**
      * Replace old first name for user with login {@code userLogin} by {@code newFirstName}
      *
      * @param id           is the id of user for which should be changed first name

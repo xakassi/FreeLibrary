@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Integer> {
-    User getUsersByLogin(String login);
-    User getUsersById(int id);
+    User getUserByLogin(String login);
+    User getUserById(int id);
 
     void deleteUserByLogin(String login);
     boolean existsByLogin(String login);

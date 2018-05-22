@@ -12,7 +12,7 @@ public class Book {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "authorid")
     private Author author;
 
@@ -33,6 +33,16 @@ public class Book {
     public Book(int id, String name, Author author, Genre genre,
                 Category category, int popularity, String description) {
         this.id = id;
+        this.name = name;
+        this.author = author;
+        this.genre = genre;
+        this.category = category;
+        this.popularity = popularity;
+        this.description = description;
+    }
+
+    public Book(String name, Author author, Genre genre,
+                Category category, int popularity, String description) {
         this.name = name;
         this.author = author;
         this.genre = genre;
