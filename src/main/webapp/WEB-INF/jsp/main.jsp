@@ -6,15 +6,9 @@
 <html>
 
 <head>
-    <title>Free Library</title>
 </head>
 <body>
-Free Library | <c:out value="${user.firstName}"/> <c:out value="${user.lastName}"/> |
-<a href="/settings"> Settings </a> | <a href="/upload"> Uploads </a> |
-<c:if test="${user.role == 'admin'}">
-    <a href="/unchecked-books"> New books for processing </a> |
-</c:if>
-<a href="/"> Exit </a> <br/><br/>
+<%@ include file="menu.jsp" %>
 
 <spring:form method="get" modelAttribute="bookRequest" action="/search-book">
     Please, fill in the required fields for search:

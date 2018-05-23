@@ -7,11 +7,10 @@
 <html>
 
 <head>
-    <title>Free Library</title>
 </head>
+
 <body>
-Free Library | <c:out value="${user.firstName}"/> <c:out value="${user.lastName}"/> | <a href="/"> Exit </a>
-<br/><br/>
+<%@ include file="menu.jsp" %>
 
 Check the file <a href="/check-file/${unchBook.id}"> ${unchBook.bookName} </a><br/>
 If it is ok and you want to add this book to the library,

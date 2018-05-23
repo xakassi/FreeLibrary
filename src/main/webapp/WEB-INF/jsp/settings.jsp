@@ -4,12 +4,10 @@
 
 <html>
 <head>
-    <title>Free Library</title>
 </head>
+
 <body>
-Free Library | <c:out value="${user.firstName}"/> <c:out value="${user.lastName}"/> |
-<a href="/main"> Main page </a> | <a href="/"> Exit </a>
-<br/>
+<%@ include file="menu.jsp" %>
 
 <spring:form method="post" modelAttribute="changeUser" action="/change-user-parameters">
     <h2> Settings </h2>

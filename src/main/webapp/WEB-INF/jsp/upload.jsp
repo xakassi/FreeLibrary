@@ -7,12 +7,10 @@
 <html>
 
 <head>
-    <title>Free Library</title>
 </head>
+
 <body>
-Free Library | <c:out value="${user.firstName}"/> <c:out value="${user.lastName}"/> |
-<a href="/main"> Main page </a> | <a href="/"> Exit </a>
-<br/><br/>
+<%@ include file="menu.jsp" %>
 
 <spring:form method="POST" modelAttribute="uncheckedBook" action="/upload-file" enctype="multipart/form-data">
     <table>
