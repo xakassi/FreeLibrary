@@ -11,72 +11,91 @@
 
 <body>
 <%@ include file="menu.jsp" %>
+<div class="col-xs-4">
+    <spring:form method="POST" modelAttribute="uncheckedBook" action="/upload-file"
+                 enctype="multipart/form-data">
 
-<spring:form method="POST" modelAttribute="uncheckedBook" action="/upload-file" enctype="multipart/form-data">
-    <table>
-        <tr>
-            <td> You can upload your book to the library.</td>
-        </tr>
-        <tr>
-            <td> Administrators will check your book
-                and add it to library if it is ok and there is no such a book yet.
-            </td>
-        </tr>
-    </table>
-    <table>
-        <tr>
-            <td> Author:</td>
-            <td><spring:input path="author"
-                              placeholder="You can input an author surname..." size="70"/>
-            </td>
-        </tr>
-        <tr>
-            <td> Description:</td>
-            <td><spring:input path="description"
-                              placeholder="You can input a little description..." size="70"/>
-            </td>
-        </tr>
-    </table>
-    <table>
-        <tr>
-            <td><input type="file" name="file"></td>
-        </tr>
-        <tr>
-            <td><input type="submit" value="Confirm"></td>
-        </tr>
-    </table>
-</spring:form>
+        You can upload your book to the library.<br>
+        Administrators will check your book
+        and add it to library if it is ok and there is no such a book yet.
+        <br><br>
 
-<c:if test="${success == 'no'}">
-    <span style="color: red; "><c:out value="${message}"/></span> <br>
-</c:if>
-<c:if test="${success == 'yes'}">
-    <span style="color: green; "><c:out value="${message}"/></span> <br>
-</c:if>
+        <div class="form-group">
+            <label class="control-label">Author:</label>
+            <spring:input path="author" class="form-control"
+                          placeholder="You can input an author surname..."/>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Description:</label>
+            <spring:input path="description" class="form-control"
+                          placeholder="You can input a little description..."/>
+        </div>
 
-<div>
-    <c:if test="${not empty notifs}">
-        *************** <br>
-        Your notifications <br>
-        *************** <br>
-        <spring:form method="get" action="/delete-notif">
-            <input type="submit" value="Delete notification">
-            <ul>
-                <c:forEach var="n" items="${notifs}">
-                    <li>
-                        <label>
-                            <input type="radio" checked name="notifID"
-                                   value="${n.id}" />
-                                ${n.notice}
-                            <br>
-                                ${n.date}
-                        </label>
-                    </li>
-                </c:forEach>
-            </ul>
-        </spring:form>
+        <div class="form-group">
+            <label class="btn btn-primary" for="my-file-selector">
+                <input id="my-file-selector" name="file" type="file" style="display:none"
+                       onchange="$('#upload-file-info').html(this.files[0].name)">
+                Browse
+            </label>
+            <span class='label label-info' id="upload-file-info"></span>
+
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Confirm" class="btn btn-success">
+        </div>
+
+    </spring:form>
+
+    <c:if test="${success == 'no'}">
+        <span style="color: red; "><c:out value="${message}"/></span> <br>
+    </c:if>
+    <c:if test="${success == 'yes'}">
+        <span style="color: green; "><c:out value="${message}"/></span> <br>
     </c:if>
 </div>
 
+<div class="col-xs-4">
+    <div class="jumbotron">
+        <div class="form-group">
+
+            <h3>
+                <p class="text-center">
+                    <span class="glyphicon glyphicon-pushpin"></span>
+                    Your notifications</p>
+
+            </h3>
+            <c:if test="${not empty notifs}">
+                <spring:form method="get" action="/delete-notif">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-danger pull-right">
+                            <span class="glyphicon glyphicon-trash"></span> Delete notification
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <ul>
+                            <c:forEach var="n" items="${notifs}">
+                                <li>
+                                    <label>
+                                        <input type="radio" checked name="notifID"
+                                               value="${n.id}"/>
+                                            ${n.notice}
+                                        <br>
+                                        <span class="label label-info">${n.date}</span>
+                                    </label>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                    </div>
+                </spring:form>
+            </c:if>
+            <c:if test="${empty notifs}">
+                <p class="text-center">
+                    <em>You have not any notifications.</em>
+                </p>
+            </c:if>
+        </div>
+    </div>
+</div>
+</div>
 </body>
 </html>

@@ -21,7 +21,10 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/main">Home</a></li>
+                <li><a href="/main">
+                    <span class="glyphicon glyphicon-home"></span>
+                    Home</a>
+                </li>
                 <li><a href="/settings"> Settings </a></li>
                 <li><a href="/upload"> Uploads </a></li>
 
@@ -31,7 +34,9 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a href="/main"><c:out value="${user.firstName} "/>
+                    <a href="/main">
+                        <span class="glyphicon glyphicon-user"></span>
+                        <c:out value="${user.firstName} "/>
                         <c:out value="${user.lastName}"/></a>
                 </li>
                 <li><a href="/"> Exit </a></li>
@@ -39,6 +44,12 @@
         </div>
     </div>
 </nav>
+
+<script type="text/javascript"
+        src="/webjars/jquery/3.2.1/jquery.min.js"></script>
+
+<script type="text/javascript"
+        src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 </body>
 

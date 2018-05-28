@@ -17,40 +17,44 @@
 <nav class="navbar navbar-inverse">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand"  href="/">Free Library</a>
+            <a class="navbar-brand" href="/">Free Library</a>
         </div>
     </div>
 </nav>
 
 <div class="container">
-    <div class="starter-template">
+    <div class="row content">
+        <div class="col-sm-3">
+            <spring:form method="post" modelAttribute="user" class="form-sign" action="/check-user">
+                <h1>Welcome!</h1>
+                <div class="form-group">
+                    <label class="control-label">Login:</label>
+                    <spring:input path="login" class="form-control" placeholder="Username"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Password:</label>
+                    <spring:password path="passwordHash" class="form-control" placeholder="Password"/>
+                </div>
 
-        <spring:form method="post" modelAttribute="user" action="/check-user">
-            <h1>Welcome!</h1>
-            <table>
-                <tr>
-                    <td> Login:</td>
-                    <td><spring:input path="login"/></td>
-                </tr>
-                <tr>
-                    <td> Password:</td>
-                    <td><spring:password path="passwordHash"/></td>
-                </tr>
-                <tr>
-                    <td><spring:button>Sign in</spring:button></td>
-                </tr>
-            </table>
-        </spring:form>
+                <spring:button class="btn btn-success btn-block">Sign in</spring:button>
 
-        <span style="color: red; "><c:out value="${message}"/></span>
-        <br/><br/>
+            </spring:form>
 
-        <img src="<c:url value="/img/library.png"/>" width="200px" height="200px">
+            <span style="color: red; "><c:out value="${message}"/></span>
+            <br/><br/>
+        </div>
 
-        <spring:form method="get" modelAttribute="user" action="/reg-user">
-            <h2>For the first time on our site?</h2>
-            <spring:button>Sign up</spring:button>
-        </spring:form>
+        <div class="col-sm-3">
+            <img src="<c:url value="/img/library.png"/>" width="280px" height="280px">
+        </div>
+
+        <div class="col-sm-3">
+            <spring:form method="get" modelAttribute="user" action="/reg-user">
+                <h2>For the first time on our site?</h2>
+                <spring:button class="btn btn-primary">Sign up</spring:button>
+            </spring:form>
+        </div>
+
 
     </div>
 </div>
