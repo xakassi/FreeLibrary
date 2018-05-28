@@ -1,0 +1,24 @@
+h1{
+    color:#0000FF;
+}
+
+h2{
+    color:#FF0000;
+}
+
+h3{
+    color:#0000FF;
+}
+
+.form-sign {
+    max-width: 300px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.form-sign .form-group {
+    margin-top: 15px;
+}
+.form-sign button {
+    margin-top: 15px;
+}

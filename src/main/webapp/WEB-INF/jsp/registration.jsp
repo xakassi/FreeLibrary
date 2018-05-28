@@ -4,47 +4,49 @@
 
 <html>
 <head>
-    <title>Free Library</title>
 </head>
+
 <body>
+<%@ include file="menu.jsp" %>
 
-<spring:form method="post" modelAttribute="user" action="/check-login">
+<div class="col-xs-4">
+    <spring:form method="post" modelAttribute="user" action="/check-login" class="form-sign">
 
-    <h2>Registration</h2>
-    <table>
-        <tr>
-            <td> First name:</td>
-            <td><spring:input path="firstName"/></td>
-        </tr>
-        <tr>
-            <td> Surname:</td>
-            <td><spring:input path="lastName"/></td>
-        </tr>
-        <tr>
-            <td> Login:</td>
-            <td><spring:input path="login"/></td>
-        </tr>
-        <tr>
-            <td> Password:</td>
-            <td><spring:password path="passwordHash"/></td>
-        </tr>
-        <tr>
-            <td> Confirm password:</td>
-            <td><input type="password" id="password" name="password"/></td>
-        </tr>
-        <tr>
-            <td><spring:button>Sign up</spring:button></td>
-        </tr>
-    </table>
-</spring:form>
+        <h2>Registration</h2>
 
-<c:if test="${success == 'no'}">
-    <span style="color: red; "><c:out value="${message}"/></span>
-</c:if>
-<c:if test="${success == 'yes'}">
-    <span style="color: green; "><c:out value="${message}"/></span> <br>
-    <a href="/"> Continue </a>
-</c:if>
+        <div class="form-group">
+            <label class="control-label">First name:</label>
+            <spring:input path="firstName" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Surname:</label>
+            <spring:input path="lastName" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Login:</label>
+            <spring:input path="login" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Password:</label>
+            <spring:password path="passwordHash" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Confirm password:</label>
+            <input type="password" id="password" name="password" class="form-control"/>
+        </div>
+
+        <spring:button class="btn btn-success btn-block">Sign up</spring:button>
+    </spring:form>
+
+    <c:if test="${success == 'no'}">
+        <span style="color: red; "><c:out value="${message}"/></span>
+    </c:if>
+    <c:if test="${success == 'yes'}">
+        <span style="color: green; "><c:out value="${message}"/></span> <br>
+        <a href="/"> Continue </a>
+    </c:if>
+
+</div>
 
 </body>
 </html>

@@ -4,9 +4,10 @@
 
 <html>
 <head>
-    <title>Free Library</title>
 </head>
+
 <body>
+<%@ include file="menu.jsp" %>
 
 <spring:form method="post" modelAttribute="newUser" action="/check-admin-login">
 

@@ -6,61 +6,48 @@
 <html>
 
 <head>
-    <title>Free Library</title>
 </head>
 <body>
-Free Library | <c:out value="${user.firstName}"/> <c:out value="${user.lastName}"/> |
-<a href="/settings"> Settings </a> | <a href="/upload"> Uploads </a> |
-<c:if test="${user.role == 'admin'}">
-    <a href="/unchecked-books"> New books for processing </a> |
-</c:if>
-<a href="/"> Exit </a> <br/><br/>
+<%@ include file="menu.jsp" %>
 
 <spring:form method="get" modelAttribute="bookRequest" action="/search-book">
-    Please, fill in the required fields for search:
-    <table>
-        <tr>
-            <td> Book name:</td>
-            <td><spring:input path="name"
-                              placeholder="Input book name..." size="70"/>
-            </td>
-        </tr>
-        <tr>
-            <td> Author:</td>
-            <td><spring:input path="author"
-                              placeholder="Input author surname..." size="70"/>
-            </td>
-        </tr>
-        <tr>
-            <td> Genre:</td>
-            <td>
-                <spring:select path="genre">
-                    <spring:option value="Choose a genre" label="Choose a genre"/>
-                    <c:if test="${not empty genres}">
-                        <c:forEach var="g" items="${genres}">
-                            <spring:option value="${g}" label="${g}"/>
-                        </c:forEach>
-                    </c:if>
-                </spring:select>
-            </td>
-        </tr>
-        <tr>
-            <td> Category:</td>
-            <td>
-                <spring:select path="category">
-                    <spring:option value="Choose a category" label="Choose a category"/>
-                    <c:if test="${not empty categories}">
-                        <c:forEach var="c" items="${categories}">
-                            <spring:option value="${c}" label="${c}"/>
-                        </c:forEach>
-                    </c:if>
-                </spring:select>
-            </td>
-        </tr>
-        <tr>
-            <td><input type="submit" value="Search"/></td>
-        </tr>
-    </table>
+
+    <div class="col-xs-4">
+
+        <p class="bg-primary">Please, fill in the required fields for search</p>
+
+        <div class="form-group">
+            <label class="control-label">Book name:</label>
+            <spring:input path="name" placeholder="Input book name..."
+                          class="form-control" size="70"/>
+        </div>
+        <div class="form-group"><label class="control-label">Author:</label>
+            <spring:input path="author" placeholder="Input author surname..."
+                          class="form-control" size="70"/>
+        </div>
+        <div class="form-group"><label class="control-label">Genre:</label>
+            <spring:select path="genre" class="form-control">
+                <spring:option value="Choose a genre" label="Choose a genre"/>
+                <c:if test="${not empty genres}">
+                    <c:forEach var="g" items="${genres}">
+                        <spring:option value="${g}" label="${g}"/>
+                    </c:forEach>
+                </c:if>
+            </spring:select>
+        </div>
+        <div class="form-group"><label class="control-label">Category:</label>
+            <spring:select path="category" class="form-control">
+                <spring:option value="Choose a category" label="Choose a category"/>
+                <c:if test="${not empty categories}">
+                    <c:forEach var="c" items="${categories}">
+                        <spring:option value="${c}" label="${c}"/>
+                    </c:forEach>
+                </c:if>
+            </spring:select>
+        </div>
+
+        <input type="submit" class="btn btn-primary" value="Search"/>
+    </div>
 </spring:form>
 
 <c:if test="${success == 'no'}">

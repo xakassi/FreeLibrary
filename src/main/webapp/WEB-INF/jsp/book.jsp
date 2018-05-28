@@ -7,12 +7,9 @@
 <html>
 
 <head>
-    <title>Free Library</title>
 </head>
 <body>
-Free Library | <c:out value="${user.firstName}"/> <c:out value="${user.lastName}"/> |
-<a href="/main"> Main page </a> | <a href="/"> Exit </a>
-<br/><br/>
+<%@ include file="menu.jsp" %>
 
 <spring:form method="get" modelAttribute="book" action="/download-book">
     <input type="hidden" name="bookID" value="${book.id}"/>

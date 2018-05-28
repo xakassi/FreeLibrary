@@ -6,13 +6,10 @@
 <html>
 
 <head>
-    <title>Free Library</title>
 </head>
+
 <body>
-Free Library | <c:out value="${user.firstName}"/> <c:out value="${user.lastName}"/> |
-<a href="/settings"> Settings </a> | <a href="/upload"> Uploads </a> |
-<a href="/main"> Main page </a> |
-<a href="/"> Exit </a> <br/><br/>
+<%@ include file="menu.jsp" %>
 
 <spring:form method="get" action="/unch-book-info">
     <c:if test="${unchNum == 0}">
